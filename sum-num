@@ -1,0 +1,88 @@
+Sumar los 10 primeros números naturales y almacenar en el acumulador.
+
+LDA #$0; Ponemos el acumulador a cero
+STA $FF; Guardamos A en memoria
+LDX #1; Ponemos X a uno
+STX $FE; Guardamos X en memoria
+LDA $FF; Recuperamos A de la memoria
+ADD $FE; Sumamos X a A
+STA $FF; Guardamos A en memoria
+LDX $FE; Recuperamos X de la memoria
+INX; Incrementamos X en uno
+LDA #10; Ponemos el acumulador a 10
+SUB $FE; Restamos X de A
+JNZ $06; Si no hay 0 saltamos a la instrucción 4
+LDA $FF; Recuperamos A de la memoria
+HLT; Acabamos el programa
+
+
+Cuenta cuantas veces esta almacenado el múmero en $2A entras las posiciones $2B a $2F y almacena ese valor en el 
+
+acumulador.
+
+LDA #$0; ponemos A a cero
+STA $FD; Guardamos A en memoria
+LDX #$2A; Iniciamos X con el número anterior a los espacios de memoria que queremos comprobar
+INX; Incrementamos X
+STX $FE; Guardamos X en memoria
+LDA #$30; Iniciamos A con el espacio posterior al último número de los espacios de memoria que queremos 
+
+comprobar
+STA $FC; Guardamos A en memoria
+SUB $FE; Restamos X a A
+JZ $1C; Salimos del programa si es cero
+LDA $2A; Cargamos el número en la memoria 2A en el acumulador
+SUB *$FE; Restamos a A lo que hay en la memoria que le indica X
+JNZ $06; Si no hay 0 saltamos a la instrucción 4
+LDA $FD; Cargamos A con otro espacio de memoria a cero
+INA; Incrementamos A con uno
+STA $FD; Guardamos A en memoria
+JMP $06; Saltamos de nuevo a 4
+LDA $FD; Cargamos A con lo que haya en el contador de la memoria
+HLT; Salimos del programa
+
+
+Escribe en $2A el mayor de los números de las posiciones $2B y $2C
+
+LDA #$00; Ponemos a cero el acumulador
+LDA $2B; Cargamos el número en la memoria  $2B en el acumulador
+SUB $2C; Restamos al acumulador el número en $2C
+JC $0D
+LDA $2C; Cargamos el número en la memoria  $2C que será el mayor en el acumulador ya que no hay carry
+STA $FD; Cargamos en la posicion $2A el valor del acumulador
+JMP 11
+LDA $FE; Cargamos el número en la memoria  $2B que será el mayor en el acumulador ya que hay carry
+STA $FD; Cargamos en la posicion $2A el valor del acumulador
+HLT
+
+
+Pon el número $5 entre las posiciones $30 y $40 de memoria (la posición $5 es $05 y está ocupada por el 
+
+programa, hago el programa suponiendo que la posición es $50)
+
+LDA #$5;  Ponemos en A el número que queremos guardar
+STA $52; Guardamos A en la memoria $52
+LDX #$2F; Ponemos en X la posicion anterior a las que queremos ocupar
+INX; incrementamos X
+STX $51; Guardamos X en la memoria $51
+LDA $52; Cargamos A con lo que haya en la memoria $52
+STA *$51; Guardamos A en la memoria que haya donde se ha almacenado X
+LDA #$40  Ponemos en A el número que queremos guardar
+SUB $51; Restamos a A la memoria de X
+JNZ $06; Si no es cero repetimos desde el incremento de X
+HLT; Paramos el programa
+
+
+Pon el número que haya almacenado en la posicion $29 entre las posiciones $2A y $2F
+
+LDA #$2F  Ponemos en A la ultima posicion de las que queremos ocupar
+STA $52; Guardamos A en la memoria $52
+LDX #$29; Ponemos en X la posicion anterior a las que queremos ocupar
+INX; incrementamos X
+STX $51; Guardamos X en la memoria $51
+LDA $29; Cargamos A con lo que haya en la memoria $29
+STA *$51; Guardamos A en la memoria que haya donde se ha almacenado X
+LDA $52; Cargamos A con la ultma posición de memoria (almacenada en $52)
+SUB $51; Restamos a A la memoria de X
+JNZ $06; Si no es cero repetimos desde el incremento de X
+HLT; Paramos el programa﻿
